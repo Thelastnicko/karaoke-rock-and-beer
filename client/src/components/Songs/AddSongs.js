@@ -1,29 +1,31 @@
-
 import React, { useState } from "react";
-
+import axios from "axios";
 
 const AddSongs = () => {
 
   const [artist, setArtist] = useState("");
-  const [songName, setSongName] = useState("");
+  const [title, setTitle] = useState("");
   const [lyrics, setLyrics] = useState("");
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Artist: ${artist}, Song Name: ${songName}, Lyrics: ${lyrics}`);
-    // You can use this information to send a request to a server or update state in your parent component
-   
-   
-    // Clear the input values after submitting the form
-   setArtist("");
-   setSongName("");
-   setLyrics("");
-  
+    if (!artist || !title || !lyrics) {
+      alert("Please fill in all fields");
+      return;
+    }
+    axios.post("http://localhost:8080/", { artist, title, lyrics })
+      .then((response) => {
+       
+        setArtist("");
+        setTitle("");
+        setLyrics("");
+      })
+      .catch((error) => {
+
+      });
   };
 
   return (
-
     <form onSubmit={handleSubmit}>
       <label htmlFor="artist">Artist:</label>
       <input
@@ -33,12 +35,12 @@ const AddSongs = () => {
         onChange={(event) => setArtist(event.target.value)}
       />
 
-      <label htmlFor="songName">Song Name:</label>
+      <label htmlFor="title">Song Name:</label>
       <input
         type="text"
-        id="songName"
-        value={songName}
-        onChange={(event) => setSongName(event.target.value)}
+        id="title"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
       />
 
       <label htmlFor="lyrics">Lyrics:</label>
@@ -51,15 +53,6 @@ const AddSongs = () => {
       <button type="submit">Add Song</button>
     </form>
   );
-
-
-
-
-
-
-
-
-  
 };
 
 export default AddSongs;

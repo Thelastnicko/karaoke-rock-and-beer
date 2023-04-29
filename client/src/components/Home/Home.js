@@ -1,51 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import axios from 'axios';
-import "./Home.css"
+import { Link } from 'react-router-dom';
+import './Home.css';
 
 const Home = () => {
-  const [songs, setSongs] = useState([]);
-  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+  const [data, setData] = useState([]);
+  const API_URL = 'http://localhost:5000';
 
   useEffect(() => {
-   
-    axios.get('http://localhost:8080') 
+    axios.get(API_URL)
       .then(response => {
-        setSongs(response.data);
+        setData(response.data);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }, []);
 
+
+const alphabet = [...Array(26)].map((_, i) => String.fromCharCode(i + 65));
+
   return (
-    <>
-      <div>
-        {songs.map(song => (
-          <div key={song._id}>
-            <h2>{song.title}</h2>
-            <h4>{song.artist}</h4>
-            <p>{song.lyrics}</p>
-          </div>
-        ))}
-      </div>
+    <div>
       <ul>
         {alphabet.map((letter) => (
-          <li key={letter}>
-            <a className="alphabet" href={`#${letter}`}>{letter}</a>
-          </li>
-        ))}
-      </ul>
-      {alphabet.map((letter) => (
-        <React.Fragment key={letter}>
-          <h2 id={letter}>{letter}</h2>
-          <p>This is the section for the letter {letter}.</p>
-        </React.Fragment>
+          <div key={letter}>
+            <h2>{letter}</h2>
+            {data.filter(item => item.artist.charAt(0).toUpperCase() === letter).map((item) => (
+             <li key={item._id}>
+            <Link to={`/artist/${item.artist}`}>
+              {item.artist}
+            </Link>
+            </li>
       ))}
-      <h3>
-        <Link to="/artist">Alice In Chains</Link>
-      </h3>
-    </>
+    </div>
+    ))}
+    </ul>
+    </div>
   );
 };
 

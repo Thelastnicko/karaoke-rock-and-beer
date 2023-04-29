@@ -1,0 +1,24 @@
+# Logs
+log/*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Pid files
+*.pid
+# Dependency directories
+node_modules/
+jspm_packages/
+# Distribution directories
+dist/
+out/
+build/
+# Environment files
+.env
+.env.*
+# Configuration files
+config.js
+config.json
+# Build files
+.DS_Store
+Thumbs.db
